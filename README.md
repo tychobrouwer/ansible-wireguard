@@ -12,7 +12,7 @@ The ```wireguard_host_address``` variable is the internal IP address of the wire
 
 The ```wireguard_peers``` variable is a list of dictionaries containing the public key and allowed IPs for each peer.
 
-The ```wireguard_private_key``` variable can be set to the private key for the wireguard server. If this variable is not set, a new private key will be generated.
+The ```wireguard_private_key``` variable can be set to the private key for the wireguard server. If this variable is not set, a private key will be generated if nessesary.
 
 The ```wireguard_dashboard_user``` variable is the username for the wg-dashboard web interface admin user.
 
@@ -44,8 +44,8 @@ Example Playbook
             allowed_ips: 10.6.0.3/32
 
       roles:
-         - { role: wireguard }
-         - { role: wireguard, wireguard_dashboard_user: "admin", wireguard_private_key: {{ wireguard_private_key }},
+         - { role: tychobrouwer.wireguard }
+         - { role: tychobrouwer.wireguard, wireguard_dashboard_user: "admin", wireguard_private_key: {{ wireguard_private_key }},
              wireguard_dashboard_port: 10086, wireguard_port: 51820, wireguard_interface_name: wg0, wireguard_global_dns: 1.1.1.1 }
 ```
 
