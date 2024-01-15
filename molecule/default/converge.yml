@@ -2,7 +2,7 @@
 - name: Converge
   hosts: all
 
-  roles:      
+  roles:
     - role: ansible-wireguard
       wireguard_dashboard_password: password123
       wireguard_host_address: 10.6.0.1/32

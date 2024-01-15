@@ -45,7 +45,7 @@
 - name: Copy wireguard config file to remote
   ansible.builtin.template:
     src: wg.conf.j2
-    dest: "/etc/wireguard/{{ wireguard_interface_name }}.conf"
+    dest: /etc/wireguard/{{ wireguard_interface_name }}.conf
     mode: "0644"
   notify: Restart wireguard
 

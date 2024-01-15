@@ -1,6 +1,6 @@
 ---
 - name: Generate wireguard private key
-  ansible.builtin.shell: wg genkey
+  ansible.builtin.command: wg genkey
   register: private_key
   changed_when: false
 

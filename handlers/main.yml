@@ -7,7 +7,7 @@
 
 - name: Restart wireguard
   ansible.builtin.service:
-    name: "wg-quick@{{ wireguard_interface_name }}.service"
+    name: wg-quick@{{ wireguard_interface_name }}.service
     state: restarted
   when: wireguard_test is false or wireguard_test is not defined
 
