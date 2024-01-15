@@ -1,8 +1,8 @@
 ---
 # vars file for wireguard
-wireguard_wireguard_port: 51820
+wireguard_port: 51820
 
-wireguard_dashboard_admin: admin
+wireguard_dashboard_user: admin
 wireguard_dashboard_port: 10086
 wireguard_dashboard_git_repo: https://github.com/donaldzou/WGDashboard.git
 wireguard_dashboard_install_location: /opt/wg-dashboard

@@ -1,5 +1,5 @@
 [Account]
-username = {{ wireguard_dashboard_admin }}
+username = {{ wireguard_dashboard_user }}
 password = {{ wireguard_private_key_hash || wireguard_dashboard_password | password_hash('sha256') }}
 
 [Server]

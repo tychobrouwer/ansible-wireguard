@@ -14,7 +14,7 @@ The ```wireguard_peers``` variable is a list of dictionaries containing the publ
 
 The ```wireguard_private_key``` variable can be set to the private key for the wireguard server. If this variable is not set, a new private key will be generated.
 
-The ```wireguard_dashboard_admin``` variable is the username for the wg-dashboard web interface admin user.
+The ```wireguard_dashboard_user``` variable is the username for the wg-dashboard web interface admin user.
 
 ```wireguard_dashboard_port``` can be set to change the port that wg-dashboard.
 
@@ -45,7 +45,7 @@ Example Playbook
 
       roles:
          - { role: wireguard }
-         - { role: wireguard, wireguard_dashboard_admin: "admin", wireguard_private_key: {{ wireguard_private_key }},
+         - { role: wireguard, wireguard_dashboard_user: "admin", wireguard_private_key: {{ wireguard_private_key }},
              wireguard_dashboard_port: 10086, wireguard_port: 51820, wireguard_interface_name: wg0, wireguard_global_dns: 1.1.1.1 }
 ```
 

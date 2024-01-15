@@ -1,0 +1,14 @@
+---
+- name: Converge
+  hosts: all
+
+  roles:      
+    - role: ansible-wireguard
+      wireguard_dashboard_password: password123
+      wireguard_host_address: 10.6.0.1/32
+      wireguard_peers:
+        - public_key: 1234567890
+          allowed_ips: 10.6.0.2/32
+        - public_key: 1234567890
+          allowed_ips: 10.6.0.3/32
+      wireguard_test: true

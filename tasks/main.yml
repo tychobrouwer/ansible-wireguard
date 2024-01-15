@@ -1,5 +1,11 @@
 ---
 # tasks file for wireguard
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+  when: ansible_os_family == "Debian"
+
 - name: Ensure required packages are installed
   ansible.builtin.package:
     name:
@@ -14,19 +20,27 @@
   notify: Restart systemd-sysctl
 
 - name: Get private key if already exists
-  ansible.builtin.command: cat /etc/wireguard/private_key_hash.txt
-  register: private_key_hash
+  ansible.builtin.command: cat /etc/wireguard/private_key.txt
+  register: wireguard_get_private_key
   changed_when: false
   failed_when: false
 
 - name: Set private key
   ansible.builtin.set_fact:
-    wireguard_private_key_hash: private_key_hash.stdout
-  when: private_key_hash.stdout != "" and wireguard_private_key is not defined
+    wireguard_private_key: "{{ wireguard_get_private_key.stdout }}"
+  when: wireguard_get_private_key.stdout != "" and wireguard_private_key is not defined
 
 - name: Generate wireguard private key
   ansible.builtin.include_tasks: generate_keys.yml
   when: wireguard_private_key is not defined and wireguard_private_key_hash is not defined
+
+- name: Save key on remote
+  ansible.builtin.copy:
+    content: "{{ wireguard_private_key }}\n"
+    dest: /etc/wireguard/private_key.txt
+    owner: root
+    group: root
+    mode: "700"
 
 - name: Copy wireguard config file to remote
   ansible.builtin.template:
@@ -35,22 +49,9 @@
     mode: "0644"
   notify: Restart wireguard
 
-- name: Add peers to wireguard config
-  ansible.builtin.blockinfile:
-    block: |
-      [Peer]
-      PublicKey = {{ item.public_key }}
-      AllowedIPs = {{ item.allowed_ips }}
-    path: "/etc/wireguard/{{ wireguard_interface_name }}.conf"
-    marker: "# {mark} ANSIBLE MANAGED BLOCK {{ idx }}"
-    prepend_newline: true
-    append_newline: true
-  loop: "{{ wireguard_peers }}"
-  loop_control:
-    index_var: idx
-
 - name: Enable wireguard systemd service
   ansible.builtin.systemd:
     name: wg-quick@{{ wireguard_interface_name }}.service
     state: started
     enabled: true
+  when: wireguard_test is false or wireguard_test is not defined
