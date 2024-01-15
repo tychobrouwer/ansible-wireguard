@@ -6,7 +6,7 @@
       - git
     state: present
 
-- name: Git clone wireguard dashboard repository
+- name: Git clone wireguard dashboard repository # noqa: latest
   ansible.builtin.git:
     repo: "{{ wireguard_dashboard_git_repo }}"
     dest: "{{ wireguard_dashboard_install_location }}"
@@ -23,7 +23,7 @@
     owner: root
     group: root
 
-- name: Install wg dashboard
+- name: Install wg dashboard # noqa: no-handler
   ansible.builtin.command: "{{ wireguard_dashboard_install_location }}/src/wgd.sh install"
   when: git_cloned.changed
   changed_when: true
