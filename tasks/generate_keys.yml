@@ -1,0 +1,17 @@
+---
+- name: Generate wireguard private key
+  ansible.builtin.command: wg genkey > privatekey
+  register: private_key
+  changed_when: false
+
+- name: Set wireguard private key
+  ansible.builtin.set_fact:
+    wireguard_private_key: "{{ private_key.stdout }}"
+
+- name: Save key on remote
+  ansible.builtin.copy:
+    content: private_key.stdout
+    dest: /etc/wireguard/private_key.txt
+    owner: root
+    group: root
+    mode: "700"

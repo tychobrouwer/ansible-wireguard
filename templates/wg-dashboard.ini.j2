@@ -1,0 +1,20 @@
+[Account]
+username = {{ wireguard_dashboard_admin }}
+password = {{ wireguard_private_key_hash || wireguard_dashboard_password | password_hash('sha256') }}
+
+[Server]
+wg_conf_path = /etc/wireguard
+app_ip = {{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}
+app_port = {{ wireguard_dashboard_port }}
+auth_req = true
+version = v3.0.6
+dashboard_refresh_interval = 60000
+dashboard_sort = status
+
+[Peers]
+peer_global_dns = {{ wireguard_global_dns }}
+peer_endpoint_allowed_ip = 0.0.0.0/0
+peer_display_mode = grid
+remote_endpoint = 172.26.17.151
+peer_mtu = 1420
+peer_keep_alive = 21

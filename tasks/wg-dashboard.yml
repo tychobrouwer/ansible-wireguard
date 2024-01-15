@@ -1,0 +1,50 @@
+---
+- name: Install required packages
+  ansible.builtin.package:
+    name:
+      - net-tools
+      - git
+    state: present
+
+- name: Git clone wireguard dashboard repository
+  ansible.builtin.git:
+    repo: "{{ wireguard_dashboard_git_repo }}"
+    dest: "{{ wireguard_dashboard_install_location }}"
+    clone: true
+    force: true
+    update: true
+    depth: 1
+  register: git_cloned
+
+- name: Set wg deamon executable
+  ansible.builtin.file:
+    path: "{{ wireguard_dashboard_install_location }}/src/wgd.sh"
+    mode: "0755"
+    owner: root
+    group: root
+
+- name: Install wg dashboard
+  ansible.builtin.command: "{{ wireguard_dashboard_install_location }}/src/wgd.sh install"
+  when: git_cloned.changed
+  changed_when: true
+
+- name: Copy wg dashboard config file to remote
+  ansible.builtin.template:
+    src: wg-dashboard.ini.j2
+    dest: "{{ wireguard_dashboard_install_location }}/src/wg-dashboard.ini"
+    mode: "0644"
+  notify: Restart wg dashboard
+
+- name: Ensure wg dashboard service file is on remote
+  ansible.builtin.template:
+    src: wg-dashboard.service.j2
+    dest: /etc/systemd/system/wg-dashboard.service
+    mode: "0664"
+    owner: root
+    group: root
+
+- name: Ensure wg dashboard service is enabled and started.changed
+  ansible.builtin.service:
+    name: wg-dashboard
+    state: started
+    enabled: true

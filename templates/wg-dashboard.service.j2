@@ -1,0 +1,10 @@
+[Unit]
+After=network.service
+
+[Service]
+WorkingDirectory={{ wireguard_dashboard_install_location }}/src
+ExecStart=/usr/bin/python3 {{ wireguard_dashboard_install_location }}/src/dashboard.py
+Restart=always
+
+[Install]
+WantedBy=default.target
