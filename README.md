@@ -36,7 +36,7 @@ Example Playbook
     - hosts: servers
       vars:
         wireguard_dashboard_password: password123
-        wireguard_host_address: 10.6.0.1/32
+        wireguard_host_address: 10.6.0.1/24
         wireguard_peers:
           - public_key: 1234567890
             allowed_ips: 10.6.0.2/32
@@ -45,7 +45,7 @@ Example Playbook
 
       roles:
          - { role: tychobrouwer.wireguard }
-         - { role: tychobrouwer.wireguard, wireguard_dashboard_user: "admin", wireguard_private_key: {{ wireguard_private_key }},
+         - { role: tychobrouwer.wireguard, wireguard_dashboard_user: "admin", wireguard_private_key: 1234567890,
              wireguard_dashboard_port: 10086, wireguard_port: 51820, wireguard_interface_name: wg0, wireguard_global_dns: 1.1.1.1 }
 ```
 

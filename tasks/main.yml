@@ -36,11 +36,11 @@
 
 - name: Save key on remote
   ansible.builtin.copy:
-    content: "{{ wireguard_private_key }}\n"
+    content: "{{ wireguard_private_key }}"
     dest: /etc/wireguard/private_key.txt
     owner: root
     group: root
-    mode: "700"
+    mode: "600"
 
 - name: Copy wireguard config file to remote
   ansible.builtin.template:
