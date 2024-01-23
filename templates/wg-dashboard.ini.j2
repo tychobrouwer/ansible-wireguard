@@ -4,7 +4,7 @@ password = {{ wireguard_private_key_hash || wireguard_dashboard_password | passw
 
 [Server]
 wg_conf_path = /etc/wireguard
-app_ip = {{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}
+app_ip = {{ ansible_default_ipv4.address | default(ansible_all_ipv4_addresses[0]) }}
 app_port = {{ wireguard_dashboard_port }}
 auth_req = true
 version = v3.0.6
