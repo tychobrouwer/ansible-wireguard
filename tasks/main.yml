@@ -10,6 +10,7 @@
   ansible.builtin.package:
     name:
       - wireguard
+      - iptables
     state: present
 
 - name: Ensure ip forwarding is set on boot
