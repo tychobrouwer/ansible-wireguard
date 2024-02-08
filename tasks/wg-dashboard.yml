@@ -8,8 +8,9 @@
     state: present
 
 - name: Set pip configuration
-  ansible.buildin.shell:
+  ansible.builtin.shell:
     cmd: pip3 config set global.break-system-packages True
+  changed_when: false
 
 - name: Install required python packages
   ansible.builtin.pip:
