@@ -4,6 +4,23 @@
     name:
       - net-tools
       - git
+      - python3-pip
+    state: present
+
+- name: Set pip configuration
+  ansible.buildin.shell:
+    cmd: pip3 config set global.break-system-packages True
+
+- name: Install required python packages
+  ansible.builtin.pip:
+    name:
+      - Flask
+      - ifcfg
+      - psutil
+      - icmplib
+      - flask-qrcode
+      - gunicorn
+      - certbot
     state: present
 
 - name: Stash git changes
