@@ -6,12 +6,28 @@
       - git
     state: present
 
+- name: Stash git changes
+  ansible.builtin.shell:
+    cmd: "git stash"
+    chdir: "{{ wireguard_dashboard_install_location }}"
+  changed_when: false
+
 - name: Git clone wireguard dashboard repository # noqa: latest
   ansible.builtin.git:
     repo: "{{ wireguard_dashboard_git_repo }}"
     dest: "{{ wireguard_dashboard_install_location }}"
     depth: 1
+    force: true
   register: git_cloned
+
+- name: Unstash git changes
+  ansible.builtin.shell:
+    cmd: "git stash pop"
+    chdir: "{{ wireguard_dashboard_install_location }}"
+  register: unstash_output
+  failed_when:
+    - unstash_output.failed
+    - not 'No stash entries found' in unstash_output.stderr
 
 - name: Set wg deamon executable
   ansible.builtin.file:
@@ -24,10 +40,6 @@
   ansible.builtin.command: "{{ wireguard_dashboard_install_location }}/src/wgd.sh install"
   when: git_cloned.changed
   changed_when: true
-
-- name: Debug wg dashboard install
-  ansible.builtin.debug:
-    var: wireguard_dashboard_password
 
 - name: Set wg dashboard password hash
   ansible.builtin.set_fact:
