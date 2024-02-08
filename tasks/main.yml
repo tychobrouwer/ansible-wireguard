@@ -56,3 +56,6 @@
     state: started
     enabled: true
   when: wireguard_test is false or wireguard_test is not defined
+
+- name: Install wg dashboard
+  ansible.builtin.include_tasks: wg-dashboard.yml
