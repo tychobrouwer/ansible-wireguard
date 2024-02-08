@@ -8,8 +8,7 @@
     state: present
 
 - name: Set pip configuration
-  ansible.builtin.shell:
-    cmd: pip3 config set global.break-system-packages True
+  ansible.builtin.command: pip3 config set global.break-system-packages True
   changed_when: false
 
 - name: Install required python packages
@@ -25,7 +24,7 @@
     state: present
 
 - name: Stash git changes
-  ansible.builtin.shell:
+  ansible.builtin.command:
     cmd: "git stash"
     chdir: "{{ wireguard_dashboard_install_location }}"
   changed_when: false
@@ -39,7 +38,7 @@
   register: git_cloned
 
 - name: Unstash git changes
-  ansible.builtin.shell:
+  ansible.builtin.command:
     cmd: "git stash pop"
     chdir: "{{ wireguard_dashboard_install_location }}"
   register: unstash_output
@@ -61,7 +60,9 @@
 
 - name: Create wg dashboard password hash
   ansible.builtin.shell:
-    cmd: echo -n "{{ wireguard_dashboard_password }}" | sha256sum
+    cmd: set -o pipefail && echo -n "{{ wireguard_dashboard_password }}" | sha256sum
+  args:
+    executable: /bin/bash
   register: password_hash
   changed_when: false
   when: wireguard_dashboard_password is defined
