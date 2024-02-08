@@ -69,7 +69,7 @@
 
 - name: Set wg dashboard password hash
   ansible.builtin.set_fact:
-    wireguard_dashboard_password_hash: "{{ password_hash.stdout | regex_replace('-', '')}}"
+    wireguard_dashboard_password_hash: "{{ password_hash.stdout | regex_replace('-', '') }}"
   when: wireguard_dashboard_password is defined
 
 - name: Copy wg dashboard config file to remote
