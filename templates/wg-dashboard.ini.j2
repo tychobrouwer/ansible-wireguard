@@ -1,6 +1,6 @@
 [Account]
 username = {{ wireguard_dashboard_user }}
-password = {{ wireguard_private_key_hash || wireguard_dashboard_password | password_hash('sha256') }}
+password = {{ wireguard_private_key_hash }}
 
 [Server]
 wg_conf_path = /etc/wireguard

@@ -28,6 +28,11 @@
   when: git_cloned.changed
   changed_when: true
 
+- name: Set wg dashboard password hash
+  ansible.builtin.set_fact:
+    wireguard_private_key_hash: "{{ wireguard_dashboard_password | password_hash('sha256') }}"
+  when: wireguard_private_key_hash is defined
+
 - name: Copy wg dashboard config file to remote
   ansible.builtin.template:
     src: wg-dashboard.ini.j2
