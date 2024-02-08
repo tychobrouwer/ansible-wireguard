@@ -59,9 +59,16 @@
   when: git_cloned.changed
   changed_when: true
 
+- name: Create wg dashboard password hash
+  ansible.builtin.shell:
+    cmd: echo -n "{{ wireguard_dashboard_password }}" | sha256sum
+  register: password_hash
+  changed_when: false
+  when: wireguard_dashboard_password is defined
+
 - name: Set wg dashboard password hash
   ansible.builtin.set_fact:
-    wireguard_dashboard_password_hash: "{{ wireguard_dashboard_password | password_hash('sha256') }}"
+    wireguard_dashboard_password_hash: "{{ password_hash.stdout | regex_replace('-', '')}}"
   when: wireguard_dashboard_password is defined
 
 - name: Copy wg dashboard config file to remote
