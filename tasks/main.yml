@@ -29,7 +29,7 @@
 - name: Set private key
   ansible.builtin.set_fact:
     wireguard_private_key: "{{ wireguard_get_private_key.stdout }}"
-  when: wireguard_get_private_key.stdout != "" and wireguard_private_key is not defined
+  when: wireguard_get_private_key.stdout | length > 0 and wireguard_private_key is not defined
 
 - name: Generate wireguard private key
   ansible.builtin.include_tasks: generate_keys.yml

@@ -35,6 +35,7 @@
     dest: "{{ wireguard_dashboard_install_location }}"
     depth: 1
     force: true
+    version: main
   register: git_cloned
 
 - name: Unstash git changes # noqa: command-instead-of-module
