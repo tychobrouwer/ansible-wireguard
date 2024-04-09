@@ -28,6 +28,7 @@
     cmd: "git stash"
     chdir: "{{ wireguard_dashboard_install_location }}"
   changed_when: false
+  failed_when: false
 
 - name: Git clone wireguard dashboard repository # noqa: latest
   ansible.builtin.git:
