@@ -11,7 +11,6 @@
     state: restarted
   when: wireguard_test is false or wireguard_test is not defined
 
-- name: Restart systemd-sysctl
-  ansible.builtin.service:
-    name: systemd-sysctl
-    state: restarted
+- name: Reload sysctl
+  ansible.builtin.command: sysctl -p
+  changed_when: true
