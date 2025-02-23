@@ -7,10 +7,6 @@
       - python3-pip
     state: present
 
-- name: Set pip configuration
-  ansible.builtin.command: pip3 config set global.break-system-packages True
-  changed_when: false
-
 - name: Install required python packages
   ansible.builtin.pip:
     name:
@@ -21,14 +17,16 @@
       - flask-qrcode
       - gunicorn
       - certbot
+    extra_args: --breack-package-system
     state: present
 
-- name: Stash git changes # noqa: command-instead-of-module
-  ansible.builtin.command:
-    cmd: "git stash"
-    chdir: "{{ wireguard_dashboard_install_location }}"
-  changed_when: false
-  failed_when: false
+- name: Stash git changes
+  ansible.builtin.git:
+    repo: "{{ wireguard_dashboard_git_repo }}"
+    dest: "{{ wireguard_dashboard_install_location }}"
+    depth: 1
+    version: main
+  register: git_stash
 
 - name: Git clone wireguard dashboard repository # noqa: latest
   ansible.builtin.git:
@@ -89,9 +87,10 @@
     mode: "0664"
     owner: root
     group: root
+  notify: Restart wg dashboard
 
 - name: Ensure wg dashboard service is enabled and started.changed
-  ansible.builtin.service:
+  ansible.builtin.systemd:
     name: wg-dashboard
     state: started
     enabled: true

@@ -1,14 +1,16 @@
 ---
 # handlers file for wireguard
 - name: Restart wg dashboard
-  ansible.builtin.service:
+  ansible.builtin.systemd:
     name: wg-dashboard
     state: restarted
+    daemon_reload: true
 
 - name: Restart wireguard
-  ansible.builtin.service:
+  ansible.builtin.systemd:
     name: wg-quick@{{ wireguard_interface_name }}.service
     state: restarted
+    daemon_reload: true
   when: wireguard_test is false or wireguard_test is not defined
 
 - name: Reload sysctl
